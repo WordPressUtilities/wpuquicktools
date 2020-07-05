@@ -1,8 +1,12 @@
 <?php
 
 /**
- * WPU Quick Tools v 0.1.0
+ * WPU Quick Tools v 0.1.1
  */
+
+/* ----------------------------------------------------------
+  Define abspath to load our dumm wp-settings.php
+---------------------------------------------------------- */
 
 define('ABSPATH', dirname(__FILE__) . '/');
 
@@ -21,10 +25,10 @@ while (!is_file($wpconfig)) {
 include $wpconfig;
 
 /* ----------------------------------------------------------
-  Query Helper
+  JSON Query Helper
 ---------------------------------------------------------- */
 
-function wpquicktools_query_to_json($sql = '') {
+function wpuquicktools_query_to_json($sql = '') {
 
     /* Init Mysql */
     $conn = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);

@@ -8,13 +8,13 @@ WPU Quick Tools is a quick library to retrieve some WordPress datas without load
 
 ## Example script :
 
-- Create a file named my-posts.php at WordPress root and edit the wpuquicktools.php file path.
+- Create a file named `my-posts.php` at WordPress root and edit the included wpuquicktools.php file path.
 
 ```php
-
+<?php
 include dirname( __FILE__ ) . '/shell/wpuquicktools/wpuquicktools.php';
 
-wpquicktools_query_to_json("
+wpuquicktools_query_to_json("
     SELECT SQL_CACHE id, post_title
     FROM " . $table_prefix . "posts
     LIMIT 0,10;
