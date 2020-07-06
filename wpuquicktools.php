@@ -1,7 +1,7 @@
 <?php
 
 /**
- * WPU Quick Tools v 0.1.1
+ * WPU Quick Tools v 0.1.2
  */
 
 /* ----------------------------------------------------------
@@ -39,11 +39,33 @@ function wpuquicktools_query_to_json($sql = '') {
     $json = array();
     $result = $conn->query($sql);
     while ($row = $result->fetch_assoc()) {
-        $json[] = $row;
+        $json[] = array_map('wpuquicktools__force_utf8', $row);
     }
     $conn->close();
 
     header('content-type:application/json');
     echo json_encode($json);
     die;
+}
+
+/* Thx http://php.net/manual/fr/function.mb-detect-encoding.php#50087 */
+function wpuquicktools__is_utf8($string) {
+    return preg_match('%^(?:
+          [\x09\x0A\x0D\x20-\x7E]            # ASCII
+        | [\xC2-\xDF][\x80-\xBF]             # non-overlong 2-byte
+        |  \xE0[\xA0-\xBF][\x80-\xBF]        # excluding overlongs
+        | [\xE1-\xEC\xEE\xEF][\x80-\xBF]{2}  # straight 3-byte
+        |  \xED[\x80-\x9F][\x80-\xBF]        # excluding surrogates
+        |  \xF0[\x90-\xBF][\x80-\xBF]{2}     # planes 1-3
+        | [\xF1-\xF3][\x80-\xBF]{3}          # planes 4-15
+        |  \xF4[\x80-\x8F][\x80-\xBF]{2}     # plane 16
+    )*$%xs', $string);
+}
+
+function wpuquicktools__force_utf8($string) {
+    if (!wpuquicktools__is_utf8($string)) {
+        $string = utf8_encode($string);
+    }
+
+    return $string;
 }
