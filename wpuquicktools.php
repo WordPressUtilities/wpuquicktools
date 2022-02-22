@@ -1,7 +1,7 @@
 <?php
 
 /**
- * WPU Quick Tools v 0.1.2
+ * WPU Quick Tools v 0.2.0
  */
 
 /* ----------------------------------------------------------
@@ -25,28 +25,49 @@ while (!is_file($wpconfig)) {
 include $wpconfig;
 
 /* ----------------------------------------------------------
-  JSON Query Helper
+  Query
 ---------------------------------------------------------- */
 
-function wpuquicktools_query_to_json($sql = '') {
-
+function wpuquicktools_query($sql = '') {
     /* Init Mysql */
     $conn = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
     if ($conn->connect_error) {
         die("Connection failed: " . $conn->connect_error);
     }
 
-    $json = array();
+    $items = array();
     $result = $conn->query($sql);
     while ($row = $result->fetch_assoc()) {
-        $json[] = array_map('wpuquicktools__force_utf8', $row);
+        $items[] = array_map('wpuquicktools__force_utf8', $row);
     }
     $conn->close();
+    return $items;
+}
 
+/* ----------------------------------------------------------
+  JSON Query Helper
+---------------------------------------------------------- */
+
+function wpuquicktools_query_to_json($sql = '') {
+    wpuquicktools_send_json(wpuquicktools_query($sql));
+}
+
+/* ----------------------------------------------------------
+  Helpers
+---------------------------------------------------------- */
+
+/* Print JSON
+-------------------------- */
+
+function wpuquicktools_send_json($json){
     header('content-type:application/json');
     echo json_encode($json);
     die;
 }
+
+
+/* UTF-8 fixes
+-------------------------- */
 
 /* Thx http://php.net/manual/fr/function.mb-detect-encoding.php#50087 */
 function wpuquicktools__is_utf8($string) {
