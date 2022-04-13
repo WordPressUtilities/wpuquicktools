@@ -1,7 +1,7 @@
 <?php
 
 /**
- * WPU Quick Tools v 0.2.0
+ * WPU Quick Tools v 0.2.1
  */
 
 /* ----------------------------------------------------------
@@ -37,8 +37,10 @@ function wpuquicktools_query($sql = '') {
 
     $items = array();
     $result = $conn->query($sql);
-    while ($row = $result->fetch_assoc()) {
-        $items[] = array_map('wpuquicktools__force_utf8', $row);
+    if (is_object($result)) {
+        while ($row = $result->fetch_assoc()) {
+            $items[] = array_map('wpuquicktools__force_utf8', $row);
+        }
     }
     $conn->close();
     return $items;
@@ -59,12 +61,11 @@ function wpuquicktools_query_to_json($sql = '') {
 /* Print JSON
 -------------------------- */
 
-function wpuquicktools_send_json($json){
+function wpuquicktools_send_json($json) {
     header('content-type:application/json');
     echo json_encode($json);
     die;
 }
-
 
 /* UTF-8 fixes
 -------------------------- */
