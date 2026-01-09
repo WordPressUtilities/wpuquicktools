@@ -1,7 +1,7 @@
 <?php
 
 /**
- * WPU Quick Tools v 0.2.1
+ * WPU Quick Tools v 0.2.2
  */
 
 /* ----------------------------------------------------------
@@ -86,8 +86,27 @@ function wpuquicktools__is_utf8($string) {
 
 function wpuquicktools__force_utf8($string) {
     if (!wpuquicktools__is_utf8($string)) {
-        $string = utf8_encode($string);
+        return wpuquicktools__to_utf8($string);
     }
 
     return $string;
+}
+
+function wpuquicktools__to_utf8($value) {
+    if ($value === null || $value === '') {
+        return $value;
+    }
+
+    $fromEncodings = [
+        'UTF-8',
+        'ISO-8859-1',
+        'ISO-8859-15',
+        'Windows-1252'
+    ];
+
+    if (mb_detect_encoding($value, 'UTF-8', true)) {
+        return $value;
+    }
+
+    return mb_convert_encoding($value, 'UTF-8', $fromEncodings);
 }
