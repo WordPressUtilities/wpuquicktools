@@ -1,7 +1,7 @@
 <?php
 
 /**
- * WPU Quick Tools v 0.2.2
+ * WPU Quick Tools v 0.2.3
  */
 
 /* ----------------------------------------------------------
@@ -72,6 +72,9 @@ function wpuquicktools_send_json($json) {
 
 /* Thx http://php.net/manual/fr/function.mb-detect-encoding.php#50087 */
 function wpuquicktools__is_utf8($string) {
+    if ($string === null || $string === '') {
+        return $string;
+    }
     return preg_match('%^(?:
           [\x09\x0A\x0D\x20-\x7E]            # ASCII
         | [\xC2-\xDF][\x80-\xBF]             # non-overlong 2-byte
@@ -85,6 +88,9 @@ function wpuquicktools__is_utf8($string) {
 }
 
 function wpuquicktools__force_utf8($string) {
+    if ($string === null || $string === '') {
+        return $string;
+    }
     if (!wpuquicktools__is_utf8($string)) {
         return wpuquicktools__to_utf8($string);
     }
